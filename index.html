@@ -4972,7 +4972,7 @@ function renderCleaningDuty() {
   } else if (names.length === 2) {
     el.textContent = names.join(" & ");
   } else {
-    el.textContent = names.slice(0, -1).join(", ") + " & " + names[names.length - 1];
+    el.textContent = names.slice(0, -1).join(", ") + ", & " + names[names.length - 1];
   }
 }
 
