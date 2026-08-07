@@ -4908,23 +4908,12 @@ let _notifFiredToday = new Set();
 let _notifIntervalId = null;
 
 function scheduleAllNotifications() {
-  /* Clear any previous interval */
-  if (_notifIntervalId) clearInterval(_notifIntervalId);
-  _notifFiredToday.clear();
-
-  if (Notification.permission !== "granted") return;
-
-  /* Mark any entries already past as fired so we don't re-fire on page reload */
-  const now    = new Date();
-  const nowMin = now.getHours() * 60 + now.getMinutes();
-  NOTIF_SCHEDULE.forEach(entry => {
-    const [h, m] = entry.time.split(":").map(Number);
-    if (nowMin > h * 60 + m) _notifFiredToday.add(entry.time);
-  });
-
-  /* Poll every 30 s — far more reliable than long setTimeout on mobile */
-  _notifIntervalId = setInterval(checkAndFireNotifications, 30000);
-  console.log("Notification polling started.");
+  // FCM (Render) handles period alerts now — avoid double notifications
+  if (_notifIntervalId) {
+    clearInterval(_notifIntervalId);
+    _notifIntervalId = null;
+  }
+  console.log("Local period polling disabled (using FCM).");
 }
 
 function checkAndFireNotifications() {
