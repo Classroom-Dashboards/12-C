@@ -19,14 +19,22 @@ firebase.initializeApp({
 const fcmMessaging = firebase.messaging();
 
 fcmMessaging.onBackgroundMessage((payload) => {
-  const title = (payload.notification && payload.notification.title) || "Class Dashboard";
-  const body  = (payload.notification && payload.notification.body)  || "";
+  const title =
+    (payload.data && payload.data.title) ||
+    (payload.notification && payload.notification.title) ||
+    "Class Dashboard";
+  const body =
+    (payload.data && payload.data.body) ||
+    (payload.notification && payload.notification.body) ||
+    "";
+  const tag = (payload.data && payload.data.tag) || "classdash";
+
   self.registration.showNotification(title, {
     body,
-    icon:  "./app-icon.png",
+    icon: "./app-icon.png",
     badge: "./app-icon.png",
-    data:  payload.data || {},
-    tag:   (payload.data && payload.data.tag) || "classdash-fcm"
+    tag,
+    renotify: true
   });
 });
 
